@@ -1,6 +1,5 @@
-﻿using MySql.Data.MySqlClient;
+using MySql.Data.MySqlClient;
 using System;
-using System.Data.SqlClient;
 
 namespace fila_hosp
 {
@@ -22,7 +21,6 @@ namespace fila_hosp
 
             while (!sair)
             {
-                Console.Clear();
                 Console.WriteLine("----------Menu----------");
                 Console.WriteLine("1 - Cadastrar");
                 Console.WriteLine("2 - Listar");
@@ -35,10 +33,8 @@ namespace fila_hosp
 
                 switch (opcao)
                 {
+
                     case "1":
-
-
-
                         Console.Clear();
 
                         Console.Write("Nome: ");
@@ -69,11 +65,8 @@ namespace fila_hosp
                         Console.ReadLine();
                         break;
 
-
+                  
                     case "2":
-
-
-
                         Console.Clear();
                         Console.WriteLine("Fila:");
 
@@ -95,124 +88,114 @@ namespace fila_hosp
                             {
                                 while (r.Read())
                                 {
-                                    string nome = r.GetString("nome");
-                                    int idade = r.GetInt32("idade");
-                                    bool pref = r.GetBoolean("preferencial");
+                                    string nome2 = r.GetString("nome");
+                                    int idade2 = r.GetInt32("idade");
+                                    bool pref2 = r.GetBoolean("preferencial");
 
-                                    if (pref)
-                                        Console.WriteLine(pos + ". " + nome + " - " + idade + " anos (P)");
+                                    if (pref2)
+                                        Console.WriteLine(pos + ". " + nome2 + " - " + idade2 + " anos (P)");
                                     else
-                                        Console.WriteLine(pos + ". " + nome + " - " + idade + " anos");
+                                        Console.WriteLine(pos + ". " + nome2 + " - " + idade2 + " anos");
 
                                     pos++;
                                 }
                             }
 
                             Console.ReadLine();
-                            break;
+                        }
+                        break;
 
-
-
-
+              
                     case "3":
+                        Console.Clear();
 
+                        using (MySqlConnection con = new MySqlConnection(conexaoString))
+                        {
+                            con.Open();
 
+                            string sql = "select * from pacientes order by preferencial desc, id asc limit 1";
+                            MySqlCommand cmd = new MySqlCommand(sql, con);
+                            MySqlDataReader r = cmd.ExecuteReader();
 
-                                Console.Clear();
-
-                                using (MySqlConnection con = new MySqlConnection(conexaoString))
-                                {
-                                    con.Open();
-
-                                    string sql = "select * from pacientes order by preferencial desc, id asc limit 1";
-                                    MySqlCommand cmd = new MySqlCommand(sql, con);
-                                    MySqlDataReader r = cmd.ExecuteReader();
-
-                                    if (!r.Read())
-                                    {
-                                        Console.WriteLine("ninguém na fila.");
-                                        r.Close();
-                                        Console.ReadLine();
-                                        break;
-                                    }
-
-                                    int id = r.GetInt32("id");
-                                    string nome = r.GetString("nome");
-                                    int idade = r.GetInt32("idade");
-                                    r.Close();
-
-                                    Console.WriteLine("atendendo: " + nome + " - " + idade + " anos");
-
-                                    string sqlDel = "delete from pacientes where id=@id";
-                                    MySqlCommand cmdDel = new MySqlCommand(sqlDel, con);
-                                    cmdDel.Parameters.AddWithValue("@id", id);
-                                    cmdDel.ExecuteNonQuery();
-                                }
-
-                                Console.ReadLine();
-                                break;
-
-                            case "4":
-
-
-
-                                Console.Clear();
-
-                                using (MySqlConnection con = new MySqlConnection(conexaoString))
-                                {
-                                    con.Open();
-
-                                    string sql = "select id, nome, idade from pacientes order by id asc";
-                                    MySqlCommand cmd = new MySqlCommand(sql, con);
-                                    MySqlDataReader r = cmd.ExecuteReader();
-
-                                    while (r.Read())
-                                    {
-                                        Console.WriteLine(
-                                            r.GetInt32("id") + " - " +
-                                            r.GetString("nome") + " - " +
-                                            r.GetInt32("idade") + " anos");
-                                    }
-
-                                    r.Close();
-
-                                    Console.Write("digite o id para alterar: ");
-                                    int idEscolhido = int.Parse(Console.ReadLine());
-
-                                    Console.Write("novo nome: ");
-                                    string novoNome = Console.ReadLine();
-
-                                    Console.Write("nova idade: ");
-                                    int novaIdade = int.Parse(Console.ReadLine());
-
-                                    string sqlUp = "update pacientes set nome=@n, idade=@i where id=@id";
-                                    MySqlCommand cmdUp = new MySqlCommand(sqlUp, con);
-
-                                    cmdUp.Parameters.AddWithValue("@n", novoNome);
-                                    cmdUp.Parameters.AddWithValue("@i", novaIdade);
-                                    cmdUp.Parameters.AddWithValue("@id", idEscolhido);
-
-                                    cmdUp.ExecuteNonQuery();
-
-                                    Console.WriteLine("paciente alterado");
-
-                                    Console.ReadLine();
-                                    break;
-                                }
-
-                            case "q":
-                                {
-                                    Console.WriteLine("saindo...");
-                                    sair = true;
-                                }
-                                break;
-
-                            default:
-                                Console.WriteLine("opção errada.");
+                            if (!r.Read())
+                            {
+                                Console.WriteLine("ninguém na fila.");
+                                r.Close();
                                 Console.ReadLine();
                                 break;
                             }
+
+                            int id = r.GetInt32("id");
+                            string nome3 = r.GetString("nome");
+                            int idade3 = r.GetInt32("idade");
+                            r.Close();
+
+                            Console.WriteLine("atendendo: " + nome3 + " - " + idade3 + " anos");
+
+                            string sqlDel = "delete from pacientes where id=@id";
+                            MySqlCommand cmdDel = new MySqlCommand(sqlDel, con);
+                            cmdDel.Parameters.AddWithValue("@id", id);
+                            cmdDel.ExecuteNonQuery();
                         }
+
+                        Console.ReadLine();
+                        break;
+
+
+                    case "4":
+                        Console.Clear();
+
+                        using (MySqlConnection con = new MySqlConnection(conexaoString))
+                        {
+                            con.Open();
+
+                            string sql = "select id, nome, idade from pacientes order by id asc";
+                            MySqlCommand cmd = new MySqlCommand(sql, con);
+                            MySqlDataReader r = cmd.ExecuteReader();
+
+                            while (r.Read())
+                            {
+                                Console.WriteLine(
+                                    r.GetInt32("id") + " - " +
+                                    r.GetString("nome") + " - " +
+                                    r.GetInt32("idade") + " anos");
+                            }
+
+                            r.Close();
+
+                            Console.Write("digite o id para alterar: ");
+                            int idEscolhido = int.Parse(Console.ReadLine());
+
+                            Console.Write("novo nome: ");
+                            string novoNome = Console.ReadLine();
+
+                            Console.Write("nova idade: ");
+                            int novaIdade = int.Parse(Console.ReadLine());
+
+                            string sqlUp = "update pacientes set nome=@n, idade=@i where id=@id";
+                            MySqlCommand cmdUp = new MySqlCommand(sqlUp, con);
+
+                            cmdUp.Parameters.AddWithValue("@n", novoNome);
+                            cmdUp.Parameters.AddWithValue("@i", novaIdade);
+                            cmdUp.Parameters.AddWithValue("@id", idEscolhido);
+
+                            cmdUp.ExecuteNonQuery();
+
+                            Console.WriteLine("paciente alterado");
+                            Console.ReadLine();
+                        }
+                        break;
+
+ 
+                    case "q":
+                        Console.WriteLine("saindo...");
+                        sair = true;
+                        break;
+
+                    default:
+                        Console.WriteLine("opção errada.");
+                        Console.ReadLine();
+                        break;
                 }
             }
         }
