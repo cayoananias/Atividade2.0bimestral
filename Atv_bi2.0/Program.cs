@@ -1,11 +1,12 @@
 using MySql.Data.MySqlClient;
 using System;
+using System.Data.SqlClient;
 
 namespace fila_hosp
 {
     class Program
     {
-        static string conexaoString = "server=localhost;uid=root;pwd=root;database=SUS";
+        static string conexaoString = "server=localhost;uid=root;pwd=root;database='SUS'";
 
         static void Main(string[] args)
         {
@@ -14,22 +15,23 @@ namespace fila_hosp
             Console.BackgroundColor = ConsoleColor.Black;
             Console.ForegroundColor = ConsoleColor.DarkGreen;
 
-            Console.WriteLine("=======================================");
-            Console.WriteLine("Bem vindo ao sistema Hospitalar v3.2(Agora com Banco de Dados!)");
-            Console.WriteLine("=======================================");
             bool sair = false;
 
             while (!sair)
             {
+                Console.Clear();
+                Console.WriteLine("===============================================================");
+                Console.WriteLine("Bem vindo ao sistema Hospitalar v3.6(Agora com Banco de Dados!)");
+                Console.WriteLine("===============================================================");
                 Console.WriteLine("----------Menu----------");
                 Console.WriteLine("1 - Cadastrar");
                 Console.WriteLine("2 - Listar");
                 Console.WriteLine("3 - Atender");
                 Console.WriteLine("4 - Alterar");
                 Console.WriteLine("q - Sair");
-                Console.WriteLine("=======================================");
+                Console.WriteLine("===============================================================");
                 Console.Write("opção: ");
-                opcao = Console.ReadLine();
+                opcao = Console.ReadLine().ToLower();
 
                 switch (opcao)
                 {
@@ -65,7 +67,7 @@ namespace fila_hosp
                         Console.ReadLine();
                         break;
 
-                  
+
                     case "2":
                         Console.Clear();
                         Console.WriteLine("Fila:");
@@ -105,7 +107,7 @@ namespace fila_hosp
                         }
                         break;
 
-              
+
                     case "3":
                         Console.Clear();
 
@@ -186,7 +188,7 @@ namespace fila_hosp
                         }
                         break;
 
- 
+
                     case "q":
                         Console.WriteLine("saindo...");
                         sair = true;
